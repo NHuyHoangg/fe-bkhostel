@@ -82,7 +82,7 @@ const UserInfo = () => {
                                 <img className="rounded-full w-auto h-auto" id="avatar-img" src={infoUser.avatar} />
                             </div>
                             <div className="mt-72 ml-20">
-                                <input id="file" encType="multipart/form-data" type="file" name="file" onChange={e => handleFileRead(e)} />
+                                <input id="file" encType="multipart/form-data" type="file" name="file" onClick={e => handleFileRead(e)} />
                                 <input id="avatar-hidden" className='hidden' type="text" name="avatar" value={convertBase64(infoUser.avatar)} />
                             </div>
                         </div>
