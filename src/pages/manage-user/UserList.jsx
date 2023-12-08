@@ -18,7 +18,7 @@ const UserList = memo(() => {
     return pageNo?pageNo:1;
   });
 
-  const [accounts, setAccounts] = useState([]);
+  const [accounts, setAccounts] = useState({});
   const getAccounts = async (pageNum) => {
     try {
       await axios
@@ -36,7 +36,7 @@ const UserList = memo(() => {
     getAccounts(pageNum);
     localStorage.removeItem("postPage");
   }, [pageNum]);
-
+  console.log(accounts);
   const handlePageChange = (newPage) => {
     setPageNum(newPage);
     window.scrollTo({
@@ -45,8 +45,8 @@ const UserList = memo(() => {
     });
   };
   const handleDeletedItem = (id) => {
-    let temp = accounts.filter((item) => item._id !== id);
-    setAccounts(temp);
+    let temp = accounts?.users?.filter((item) => item._id !== id);
+    setAccounts({totalUsers:accounts.totalUsers-1,users:temp});
   };
   return (
     <div className="grid grid-cols-12">
@@ -91,7 +91,8 @@ const UserList = memo(() => {
                   <div className="col-span-1">Trạng thái</div>
                   <div className="col-span-2">Thao tác</div>
                 </div>
-                {accounts?.map((item, index) => {
+                {
+                accounts?.users?.map((item, index) => {
                   return (
                     <UserRow
                       key={index}
@@ -99,17 +100,19 @@ const UserList = memo(() => {
                       handleDeletedItem={handleDeletedItem}
                     />
                   );
-                })}
+                })
+                }
               </div>
               <div className="my-4 absolute bottom-0 left-0 right-0">
                 <span className="ml-4">
-                  Hiển thị 1 đến {accounts.length} của {accounts.length}{" "}
+                  Hiển thị 1 đến {accounts?.users?.length} của {accounts?.users?.length}{" "}
                   mục
                 </span>
                 <div className="flex justify-center text-center">
                   <AdminPagination
                     handleChange={handlePageChange}
                     pageStatus={pageNum}
+                    maxPage = {Math.ceil(accounts.totalUsers/7)}
                   />
                 </div>
               </div>

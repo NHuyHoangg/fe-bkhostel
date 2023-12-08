@@ -59,7 +59,6 @@ const Posts = memo(() => {
   };
 
   const handleFilter = (filterType) => {
-    console.log(postsAdmin);
     setSelectedFilter(filterType);
     if (filterType !== seletedFilter) {
       if (filterType === "All") {
@@ -95,7 +94,7 @@ const Posts = memo(() => {
   return (
     <div className="grid grid-cols-12">
       <LeftSideBar />
-      <div className="w-auto col-start-3 col-span-10 h-[100vh] bg-[#e8f1fd]">
+      <div className="w-auto col-start-3 col-span-10 pb-8 bg-[#e8f1fd]">
         <div className="pt-8 ml-8">
           <h2 className="font-bold text-3xl">Danh sách bài đăng</h2>
           <div className="pr-8 mt-4">
@@ -233,13 +232,14 @@ const Posts = memo(() => {
               </div>
               <div className="mt-8 lg:mt-12">
                 <span className="ml-4">
-                  Hiển thị 1 đến {renderedPost.totalPosts} của{" "}
+                  Hiển thị {(pageNum===1)?1:((pageNum-1)*7)} đến {(pageNum*7)>renderedPost.totalPosts?renderedPost.totalPosts:pageNum*7} của{" "}
                   {renderedPost.totalPosts} mục
                 </span>
                 <div className="flex justify-center text-center">
                   <AdminPagination
                     handleChange={handlePageChange}
                     pageStatus={pageNum}
+                    maxPage = {Math.ceil(renderedPost.totalPosts/7)}
                   />
                 </div>
               </div>

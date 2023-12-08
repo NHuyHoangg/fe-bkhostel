@@ -3,7 +3,7 @@ import { memo } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 
 // eslint-disable-next-line react/display-name, react/prop-types
-const Pagination = memo(({ handleChange, pageStatus }) => {
+const Pagination = memo(({ handleChange, pageStatus, maxPage }) => {
   let selectedPageCSS = "text-white bg-[rgb(57,197,200)] rounded-md";
   let notSelectedPageCSS =
     "text-black bg-white border border-color-[rgb(57,197,200)] rounded-md hover:bg-[rgb(57,197,200)] hover:text-white";
@@ -49,7 +49,7 @@ const Pagination = memo(({ handleChange, pageStatus }) => {
               />
             </button>
           </li>
-          {renderPage(3)}
+          {renderPage(maxPage?maxPage:1)}
           <li>
             <button
               className={`px-3 py-1 transition-colors duration-150 focus:shadow-outline ${
