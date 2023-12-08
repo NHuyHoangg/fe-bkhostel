@@ -3,13 +3,10 @@ import sideImage from '../../assets/images/register/image.png';
 import Input from '../../components/input/TextInput';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
-import { registerUser } from '../../utils/users';
-
-const Register = memo(() => {
+const Login = memo(() => {
   const user = {
     minUserNameLen: 6,
-    minPasswordLen: 6,
+    minPasswordLen: 8,
   };
   const {
     register,
@@ -19,20 +16,10 @@ const Register = memo(() => {
     defaultValues: {
       username: ``,
       email: ``,
-      phone: ``,
       password: ``,
-      password_confirm: ``,
+      confirmedPassword: ``,
     },
   });
-
-  const { mutate, isPending, isError, isSuccess, error, status } = useMutation({
-    mutationFn: registerUser,
-  });
-  const submitHandler = (data) => {
-    mutate(data);
-  };
-  console.log(`status = ${status}`)
-  console.log(error);;
   return (
     <div className="h-screen">
       {/* <!-- Global Container --> */}
@@ -40,16 +27,14 @@ const Register = memo(() => {
         {/* <!-- Card Container --> */}
         <div className="relative flex flex-col m-6 space-y-10 bg-white shadow-2xl rounded-2xl md:flex-row md:space-y-0 md:m-0">
           {/* <!-- Left Side --> */}
-          <div className="p-6 md:p-12">
+          <div className="p-6 md:p-20">
             {/* <!-- Top Content --> */}
-            <h2 className="font-mono mb-2 text-4xl font-bold text-center">
-              Đăng ký
-            </h2>
+            <h2 className="font-mono mb-5 text-4xl font-bold">Đăng ký</h2>
             {/* <p className="max-w-sm mb-12 font-sans font-light text-gray-600">
             Log in to your account to upload or download pictures, videos or
             music.
           </p> */}
-            <form onSubmit={handleSubmit(submitHandler)}>
+            <form onSubmit={handleSubmit((data) => console.log(data))}>
               <div className="my-6">
                 <Input
                   type="text"
@@ -66,22 +51,13 @@ const Register = memo(() => {
                   }}
                 />
               </div>
-              <div className="my-6">
-                <Input
-                  type="phone"
-                  placeholder="Nhập số điện thoại"
-                  label="phone"
-                  register={register}
-                  errors={errors}
-                  validatedObject={{
-                    required: `Vui lòng nhập số điện thoại`,
-                    pattern: {
-                      value: /[0-9]{10}/,
-                      message: `Số điện thoại phải có 10 chữ số`,
-                    },
-                  }}
+              {/* <div className="my-6">
+                <input
+                  type="text"
+                  className="w-full py-4 px-6 border border-gray-300 rounded-md placeholder:font-sans placeholder:font-light hover:outline hover:outline-black hover:outline-1"
+                  placeholder="Nhập tài khoản"
                 />
-              </div>
+              </div> */}
               <div className="my-6">
                 <Input
                   type="email"
@@ -93,6 +69,11 @@ const Register = memo(() => {
                     required: `Vui lòng nhập địa chỉ email`,
                   }}
                 />
+                {/* <input
+                  type="password"
+                  className="w-full py-4 px-6 border border-gray-300 rounded-md placeholder:font-sans placeholder:font-light hover:outline hover:outline-black hover:outline-1"
+                  placeholder="Nhập địa chỉ email"
+                /> */}
               </div>
               <div className="my-6">
                 <Input
@@ -119,7 +100,7 @@ const Register = memo(() => {
                 <Input
                   type="password"
                   placeholder="Nhập lại mật khẩu"
-                  label="password_confirm"
+                  label="confirmedPassword"
                   register={register}
                   errors={errors}
                   validatedObject={{
@@ -144,67 +125,27 @@ const Register = memo(() => {
 
                 <button
                   type="submit"
-                  className={`${
-                    isPending && 'disable'
-                  } w-full md:w-auto flex justify-center items-center p-4 space-x-2 font-sans font-bold text-white rounded-md px-9 bg-cyan-600 shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border transition hover:-translate-y-0.5 duration-150`}
+                  className="w-full md:w-auto flex justify-center items-center p-4 space-x-2 font-sans font-bold text-white rounded-md px-9 bg-cyan-600 shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border transition hover:-translate-y-0.5 duration-150"
                 >
-                  {isPending ? (
-                    <>
-                      <svg
-                        className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                      Đang xử lý...
-                    </>
-                  ) : (
-                    <>
-                      <span>Đăng ký</span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-7"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                        stroke="#ffffff"
-                        fill="none"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <line x1="5" y1="12" x2="19" y2="12" />
-                        <line x1="13" y1="18" x2="19" y2="12" />
-                        <line x1="13" y1="6" x2="19" y2="12" />
-                      </svg>
-                    </>
-                  )}
+                  <span>Đăng ký</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-7"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="#ffffff"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <line x1="13" y1="18" x2="19" y2="12" />
+                    <line x1="13" y1="6" x2="19" y2="12" />
+                  </svg>
                 </button>
               </div>
             </form>
-            {isSuccess && (
-              <p className="text-center mt-2 text-green-600">
-                Đăng ký thành công!
-              </p>
-            )}
-            {isError && (
-              <p className="text-center mt-2 text-red-600">
-                {error.message}
-              </p>
-            )}
             {/* <!-- Border --> */}
             {/* <div className="mt-12 border-b border-b-gray-300"></div> */}
             {/* <!-- Bottom Content --> */}
@@ -227,13 +168,11 @@ const Register = memo(() => {
           </div>
 
           {/* <!-- Right Side --> */}
-          <div className="rounded-r-2xl hidden w-[430px] md:block bg-[url('/src/assets/images/register/image.png')]">
-            <img
-              src={sideImage}
-              alt=""
-              className="w-[430px] h-[629.6px] hidden"
-            />
-          </div>
+          <img
+            src={sideImage}
+            alt=""
+            className="w-[430px] h-[670px] hidden md:block"
+          />
 
           {/* <!-- Close Button --> */}
           <Link to="/">
@@ -260,4 +199,4 @@ const Register = memo(() => {
   );
 });
 
-export default Register;
+export default Login;

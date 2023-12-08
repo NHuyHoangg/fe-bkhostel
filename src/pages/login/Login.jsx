@@ -4,32 +4,19 @@ import facebookIcon from '../../assets/images/login/facebook.png';
 import googleIcon from '../../assets/images/login/google.png';
 import sideImage from '../../assets/images/login/image.png';
 import TextInput from '../../components/input/TextInput';
-import { loginUser } from '../../utils/users';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-
 const Login = memo((props) => {
+   const user = {
+     minUserNameLen: 6,
+     minPasswordLen: 8,
+   };
   const navigate = useNavigate();
-  const user = {
-    minUserNameLen: 6,
-    minPasswordLen: 6,
-  };
-
-  const { mutate, isPending, isSuccess, isError, error, status } = useMutation({
-    mutationFn: async (userData) => {
-      const response = await loginUser(userData);
-      console.log(response);
-      localStorage.setItem('token', response.token);
-      console.log(`role = ${response.result['user-info'].role}`);
-      localStorage.setItem('role', response.result['user-info'].role);
-    },
+  const { mutate, isPending, isError, error } = useMutation({
+    // mutationFn: loginAPI()
     onSuccess: () => {
       // Go back to home page
-      const role = localStorage.getItem('role');
-      if (role === 'ADMIN') {
-         return navigate('/admin/statistics');
-      }
       navigate('/');
     },
   });
@@ -43,13 +30,11 @@ const Login = memo((props) => {
       password: ``,
     },
   });
-  const submitHandler = async (data) => {
+  const submitHandler = (data) => {
     console.log(data);
     // Preprocess data here
-    mutate(data);
+    // mutate({data});
   };
-  console.log(`status = ${status}`);
-
   return (
     <div className="h-screen">
       {/* <!-- Global Container --> */}
@@ -64,7 +49,7 @@ const Login = memo((props) => {
             Log in to your account to upload or download pictures, videos or
             music.
           </p> */}
-            <form onSubmit={handleSubmit(submitHandler)}>
+            <form onSubmit={handleSubmit((data) => submitHandler(data))}>
               <div className="my-6">
                 <TextInput
                   type="text"
@@ -80,12 +65,27 @@ const Login = memo((props) => {
                     },
                   }}
                 />
+                {/* <input
+                  type="text"
+                  className="w-full py-4 px-6 border border-gray-300 rounded-md placeholder:font-sans placeholder:font-light hover:outline hover:outline-black hover:outline-1"
+                  placeholder="Nhập tên tài khoản"
+                  {...register('username', {
+                    required: `Vui lòng nhập tên tài khoản`,
+                    minLength: {
+                      value: 6,
+                      message: `Mật khẩu phải có ít nhất 6 ký tự`,
+                    },
+                  })}
+                /> */}
+                {/* <p className="text-red-600 text-sm">
+                  {errors.username?.message}
+                </p> */}
               </div>
               <div className="my-6">
                 <TextInput
                   type="password"
                   placeholder="Nhập lại mật khẩu"
-                  label="password"
+                  label="confirmedPassword"
                   register={register}
                   errors={errors}
                   validatedObject={{
@@ -96,6 +96,21 @@ const Login = memo((props) => {
                     },
                   }}
                 />
+                {/* <input
+                  type="password"
+                  className="w-full py-4 px-6 border border-gray-300 rounded-md placeholder:font-sans placeholder:font-light hover:outline hover:outline-black hover:outline-1"
+                  placeholder="Nhập mật khẩu"
+                  {...register('password', {
+                    required: `Vui lòng nhập mật khẩu`,
+                    minLength: {
+                      value: 8,
+                      message: `Mật khẩu phải có ít nhất 8 ký tự`,
+                    },
+                  })}
+                /> */}
+                <p className="text-red-600 text-sm">
+                  {errors.password?.message}
+                </p>
               </div>
               {/* <!-- Middle Content --> */}
               <div className="flex flex-col items-center justify-between mt-6 space-y-6  md:flex-row md:space-y-0 md:space-x-6">
@@ -103,59 +118,29 @@ const Login = memo((props) => {
                   type="submit"
                   className="w-full md:w-auto flex justify-center items-center p-4 space-x-2 font-sans font-bold text-white rounded-md px-9 bg-cyan-600 shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border transition hover:-translate-y-0.5 duration-150"
                 >
-                  {isPending ? (
-                    <>
-                      <svg
-                        className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                      Đang xử lý...
-                    </>
-                  ) : (
-                    <>
-                      <span>Đăng nhập</span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-6"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                        stroke="#ffffff"
-                        fill="none"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <line x1="5" y1="12" x2="19" y2="12" />
-                        <line x1="13" y1="18" x2="19" y2="12" />
-                        <line x1="13" y1="6" x2="19" y2="12" />
-                      </svg>
-                    </>
-                  )}
-                </button>
-                <Link to="/register">
-                  <button
-                    type="button"
-                    className="w-full md:w-auto flex justify-center items-center p-4 space-x-2 font-sans font-bold text-cyan-600 outline outline-cyan-600 bg-white rounded-md px-9 shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border transition hover:-translate-y-0.5 duration-150"
+                  <span>Đăng nhập</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-6"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="#ffffff"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   >
-                    Đăng ký
-                  </button>
-                </Link>
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <line x1="13" y1="18" x2="19" y2="12" />
+                    <line x1="13" y1="6" x2="19" y2="12" />
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  className="w-full md:w-auto flex justify-center items-center p-4 space-x-2 font-sans font-bold text-cyan-600 outline outline-cyan-600 bg-white rounded-md px-9 shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border transition hover:-translate-y-0.5 duration-150"
+                >
+                  <Link to="/register">Đăng ký</Link>
+                </button>
               </div>
             </form>
 
@@ -164,11 +149,6 @@ const Login = memo((props) => {
                 Quên mật khẩu?
               </Link>
             </div>
-            {isError && (
-              <div className="font-regular text-red-600 text-center my-4">
-                {error.message}
-              </div>
-            )}
             {/* <!-- Border --> */}
             <div className="mt-12 border-b border-b-gray-300"></div>
             {/* <!-- Bottom Content --> */}
@@ -191,13 +171,11 @@ const Login = memo((props) => {
           </div>
 
           {/* <!-- Right Side --> */}
-          <div className="rounded-r-2xl hidden w-[430px] md:block bg-[url('/src/assets/images/login/image.png')]">
-            <img
-              src={sideImage}
-              alt=""
-              className="w-[430px] h-[629.6px] hidden"
-            />
-          </div>
+          <img
+            src={sideImage}
+            alt=""
+            className="w-[430px] h-[670px] hidden md:block"
+          />
 
           {/* <!-- Close Button --> */}
           <Link to="/">

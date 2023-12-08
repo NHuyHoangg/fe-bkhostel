@@ -1,25 +1,45 @@
+import axios from "axios";
+import LeftSideBar from "./components/LeftSideBar";
+import { useEffect, useState } from "react";
+
+const url = `https://bkhostel.hcmut.tech/recharge/656a913619f0d4c6a3d30039`;
+const tokenUrl = `https://bkhostel.hcmut.tech/auth/sign-in`;
+
 const Recharge = () => {
+    const [infoUser, setInfoUser] = useState([]);
+    const axiosInstance = axios.create({
+        baseURL: tokenUrl,
+    });
+    const bodyValue = {
+        "username": "username",
+        "password": "123456"
+    };
+    let token; // initial state
+    axiosInstance.interceptors.request.use(async config => {
+        if (!token) {
+            const { data } = await axios.post(tokenUrl, bodyValue);
+            token = data.token;
+        }
+        config.headers.Authorization = `Bearer ${token}`;
+        return config
+    });
+    const getData = async () => {
+        try {
+            const res = await axiosInstance.get(url);
+            setInfoUser(res.data);
+            console.log(res.data);
+
+        } catch (error) {
+            console.log(error.response);
+        }
+    };
+    useEffect(() => {
+        getData();
+    }, []);
+
     return (
         <div className="grid grid-cols-8 gap-3 mr-20 ">
-            <div className="font-semibold row-start-1 row-span-7 col-start-1 col-span-2 pl-3 text-lg bg-[#F5F4F3]">
-                <div className="py-8 grid grid-cols-2">
-                    <div className="grid grid-cols-2">
-                        <div className="w-20 h-20 rounded-full bg-white items-center">
-                            <p></p>
-                        </div>
-                        <div className="pl-3 pt-3 items-center justify-center">
-                            <div className="hover:cursor-pointer">user</div>
-                            <div>12345678</div>
-                        </div>
-                    </div>
-                </div>
-                <div className="my-8 hover:cursor-pointer">Đăng tin cho thuê</div>
-                <div className="my-8 hover:cursor-pointer">Lịch sử cho thuê</div>
-                <div className="my-8 hover:cursor-pointer">Thông tin cá nhân</div>
-                <div className="my-8 hover:cursor-pointer">Nạp tiền</div>
-                <div className="my-8 hover:cursor-pointer">Lịch sử nạp tiền</div>
-                <div className="my-8 hover:cursor-pointer">Thoát</div>
-            </div>
+            <LeftSideBar />
             <div className="flex flex-col row-start-1 row-span-7 col-start-3 col-span-6  ">
                 <div className="px-3 py-4 mt-6 border-b border-gray rounded-md h-fit text-5xl mb-6">
                     LỊCH SỬ NẠP TIỀN
@@ -48,26 +68,24 @@ const Recharge = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <td class="px-6 py-4 grid-cols-6">
-
-                            </td>
-                            <td class="px-6 py-4">
-
-                            </td>
-                            <td class="px-6 py-4">
-
-                            </td>
-                            <td class="px-6 py-4">
-
-                            </td>
-                            <td class="px-6 py-4">
-
-                            </td>
-                            <td class="px-6 py-4">
-
-                            </td>
-                        </tr>
+                        {infoUser.map((user, i) => (
+                            <tr key={i} class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                <td class="px-6 py-4 grid-cols-6 border-r-2">
+                                    {user.date}
+                                </td>
+                                <td class="px-6 py-4 border-r-2">
+                                    {user._id}
+                                </td>
+                                <td class="px-6 py-4 border-r-2">
+                                    {user.amount}
+                                </td>
+                                <td class="px-6 py-4 border-r-2">
+                                    {user.method}
+                                </td>
+                                <td class="px-6 py-4 border-r-2">
+                                    {user.status}
+                                </td>
+                            </tr>))}
                     </tbody>
                 </table>
             </div>

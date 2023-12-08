@@ -5,32 +5,23 @@ import { MdOutlineOtherHouses } from "react-icons/md";
 import MapLocation from './MapLocation';
 
 
-const RentalDetail = ({
-    assets, 
-    title, 
-    full_address : address,
-    price,
-    area, 
-    postDate, 
-    desc, 
-    created_by: owner, 
-    location = {lat: 10.734363531931315, lng: 106.72015766304695}
-}) => {
-    return (
+const RentalDetail = ({imageUrl, title, addressDetail, price, area, postDate, descriptionDetail, owner, location}) => {
+    
+        return (
         <div className="flex flex-col gap-4 px-3 py-3 border border-gray-300 rounded-md h-fit">
             <div className='w-4/5 h-[350px] self-center overflow-hidden rounded-md my-2'>
-                <img src={assets[0]} alt="house image" className='w-full h-full'/>
+                <img src={imageUrl} alt="house image" className='w-full h-full'/>
             </div>
             <p className='text-2xl text-[#E13427] font-semibold'>{title}</p>
             <div className='flex items-center gap-1'>
                 <CiLocationOn />
-                <p className='text-sm'>Địa chỉ: {`${address.district}, ${address.ward}, ${address.street_address}`}</p>
+                <p className='text-sm'>Địa chỉ: {addressDetail}</p>
             </div>
             <div className='flex items-center gap-4 mb-2'>
                 <div className='flex items-center gap-1'>
                     <RiMoneyDollarCircleLine className='text-[#258635]'/>
                     <p className='text-sm text-[#258635] font-semibold'>
-                        {Math.ceil(price/10000)/100} triệu/tháng
+                        {price} triệu/tháng
                     </p>
                 </div>
                 <div className='flex items-center gap-1'>
@@ -45,14 +36,14 @@ const RentalDetail = ({
             
             <div className='mb-3'>
                 <p className='text-lg font-semibold mb-2'>Thông tin mô tả</p>
-                <p className='text-sm'>{desc}</p>
+                <p className='text-sm'>{descriptionDetail}</p>
             </div>
 
             <div className='mb-3'>
                 <p className='text-lg font-semibold mb-2'>Thông tin liên hệ</p>
                 <div className='grid grid-cols-2  w-1/2 text-sm'>
                     <div>Liên hệ</div>
-                    <div>{owner.full_name}</div>
+                    <div>{owner.fullName}</div>
                 </div>
                 <div className='bg-gray-300 w-4/5 h-[0.5px] my-2'/>
                 <div className='grid grid-cols-2  w-1/2 text-sm'>
@@ -68,7 +59,7 @@ const RentalDetail = ({
 
             <div className='mb-3'>
                 <p className='text-lg font-semibold mb-2'>Bản đồ</p>
-                <MapLocation location={location} address={address}/>
+                <MapLocation location={location} address={addressDetail}/>
             </div>
         </div>
     )
