@@ -1,5 +1,5 @@
 import { memo, useState, useRef, useEffect } from 'react';
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import {
   HeartOutlined,
@@ -9,10 +9,21 @@ import {
   CaretDownOutlined,
   UserOutlined,
   DollarOutlined,
+  FileSearchOutlined,
+  HistoryOutlined,
 } from '@ant-design/icons';
 import HoverDivider from '../common/HoverDivider';
 import defaultUser from '../../assets/images/header/default-user.png';
+import { useQuery } from '@tanstack/react-query';
+import { usePostFilterContext } from '../../contexts/PostFilterContext';
+import { rentingTypes } from './constant';
+
 const Header = memo((props) => {
+  const { updateFilterValue } = usePostFilterContext();
+  const { refetch } = useQuery({
+    queryKey: ['posts'],
+    enabled: false,
+  });
   const navigate = useNavigate();
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const optionsRef = useRef(null);
@@ -29,24 +40,47 @@ const Header = memo((props) => {
       document.removeEventListener('mousedown', optionSelectionHandler);
   });
   const isAuthenticated = !!localStorage.getItem('token');
+  console.log(`isAuth = ${isAuthenticated}`);
   const logoutUser = () => {
-    localStorage.removeItem('token');
+    localStorage.clear();
     navigate('/login');
+  };
+  // const routingHandler = () => {
+  //   if (isAuthenticated) {
+  //     return navigate('/post-new');
+  //   }
+  //   navigate('/login');
+  // };
+  const rentingTypeHandler = (typeValue) => {
+    console.log(`rentingTypes = ${typeValue}`);
+    navigate('/');
+    updateFilterValue({ key: 'type', value: typeValue });
+    setTimeout(() => refetch(), 100);
   };
   return (
     <nav className="container mx-auto px-20 py-4 border-b-2 border-b-gray-300">
       <div className="flex flex-col justify-between items-center md:flex-row space-y-4 md:space-y-0 md:space-x-4 mx-auto">
-        <span className="text-4xl text-cyan-600 font-semibold">
-          <Link to="/">BKHostel</Link>
+        <span
+          onClick={() => rentingTypeHandler(null)}
+          className="text-4xl text-cyan-600 font-semibold cursor-pointer"
+        >
+          {/* <Link to="/">BKHostel</Link> */}
+          BKHostel
         </span>
         <div className="flex flex-col items-start  justify-center md:items-center md:flex-row space-y-2 md:space-y-0 space-x-0 md:space-x-16">
           {/* Favorite  */}
-          <div className="flex items-center justify-center space-x-2">
-            <HeartOutlined />
-            <p className="font-medium">Yêu thích</p>
-          </div>
+          <Link to="/save-post">
+            <div className="flex items-center justify-center space-x-2">
+              <HeartOutlined />
+
+              <p className="font-medium">Yêu thích</p>
+            </div>
+          </Link>
           {isAuthenticated ? (
-            <div className="options-container relative" ref={optionsRef}>
+            <div
+              className="options-container relative hover:cursor-pointer"
+              ref={optionsRef}
+            >
               <div
                 onClick={() => setIsDropdownOpened((cur) => !cur)}
                 className="flex justify-center items-center space-x-2"
@@ -63,28 +97,49 @@ const Header = memo((props) => {
                 } z-10 absolute  left-[-135%] border mt-2  bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-48 mx-auto`}
               >
                 <ul className="py-2 text-sm text-gray-700 dark:text-gray-200 mx-auto">
-                  <li className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                    <UserOutlined />
-                    <p>Trang cá nhân</p>
-                  </li>
-                  <li className="flex justify-start items-center space-x-1 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                    <PlusCircleOutlined />
-                    <p>Đăng tin</p>
-                  </li>
-                  <li className="flex justify-start items-center space-x-1 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                    <HeartOutlined />
-                    <p>Trang yêu thích</p>
-                  </li>
-                  <li className="flex justify-start items-center space-x-1 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                    <DollarOutlined />
-                    <p>Nạp tiền</p>
-                  </li>
-                  <li className="flex justify-start items-center space-x-1 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                    <HeartOutlined />
-                    <p>Trang yêu thích</p>
-                  </li>
+                  <Link to="/profile">
+                    <li className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <UserOutlined />
 
-                  <li onClick={logoutUser} className="flex justify-start items-center space-x-1 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <p>Trang cá nhân</p>
+                    </li>
+                  </Link>
+                  <Link to="/post-new">
+                    <li className="flex justify-start items-center space-x-1 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <PlusCircleOutlined />
+
+                      <p>Đăng tin</p>
+                    </li>
+                  </Link>
+                  <Link to="/post-history">
+                    <li className="flex justify-start items-center space-x-1 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <FileSearchOutlined />
+                      <p>Lịch sử đăng tin</p>
+                    </li>
+                  </Link>
+                  <Link to="/save-post">
+                    <li className="flex justify-start items-center space-x-1 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <HeartOutlined />
+
+                      <p>Trang yêu thích</p>
+                    </li>
+                  </Link>
+                  <Link to="/history-money">
+                    <li className="flex justify-start items-center space-x-1 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <DollarOutlined />
+                      <p>Nạp tiền</p>
+                    </li>
+                  </Link>
+                  <Link to="/history-money/history">
+                    <li className="flex justify-start items-center space-x-1 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <HistoryOutlined />
+                      <p>Lịch sử nạp tiền</p>
+                    </li>
+                  </Link>
+                  <li
+                    onClick={logoutUser}
+                    className="flex justify-start items-center space-x-1 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >
                     <p className="text-red-600">Đăng xuất</p>
                   </li>
                 </ul>
@@ -110,12 +165,16 @@ const Header = memo((props) => {
           )}
 
           <button
+            onClick={() =>
+              isAuthenticated ? navigate('/post-new') : navigate('/login')
+            }
             type="button"
             className="flex space-x-2 items-center justify-center bg-cyan-600 p-4 px-9 text-center text-white rounded-lg"
           >
             <p className="font-medium">Đăng tin</p>
             <PlusCircleOutlined />
           </button>
+
           {/* Post */}
         </div>
       </div>
@@ -123,13 +182,23 @@ const Header = memo((props) => {
 
       <div className="hidden md:flex justify-between items-center mt-4 text-[13px]  md:space-x-4 mx-auto">
         {/* <div>Quà theo lễ</div> */}
-        <div className="group hover:cursor-pointer">
+        <div onClick={() => rentingTypeHandler(null)} className="group hover:cursor-pointer">
           <span>
-            <Link to="/">Trang chủ</Link>
+            {/* <Link to="/">Trang chủ</Link> */}
+            Trang chủ
           </span>
           <HoverDivider />
         </div>
-        <div className="group hover:cursor-pointer">
+        {rentingTypes.map((rentingType) => (
+          <div
+            onClick={() => rentingTypeHandler(rentingType.id)}
+            className="group hover:cursor-pointer"
+          >
+            <span>{rentingType.content}</span>
+            <HoverDivider />
+          </div>
+        ))}
+        {/* <div className="group hover:cursor-pointer">
           <span>Cho thuê phòng trọ</span>
           <HoverDivider />
         </div>
@@ -145,13 +214,16 @@ const Header = memo((props) => {
         <div className="group hover:cursor-pointer">
           <span>Tìm người ở ghép</span>
           <HoverDivider />
-        </div>
+        </div> */}
         <div className="group hover:cursor-pointer">
           <span>Tin tức</span>
           <HoverDivider />
         </div>
         <div className="group hover:cursor-pointer">
-          <span>Bảng giá dịch vụ</span>
+          <Link to="/services">
+            <span>Bảng giá dịch vụ</span>
+          </Link>
+
           <HoverDivider />
         </div>
       </div>

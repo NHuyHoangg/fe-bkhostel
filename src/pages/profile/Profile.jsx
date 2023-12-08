@@ -154,7 +154,7 @@ const Profile = () => {
                         </div>
 
                         <button type="submit" className='justify-center items-center w-full rounded-md px-3 py-3 mt-8 mb-16 bg-[#0000FF]'>
-                            <p className='text-sm text-white text-3xl font-semibold'>Cập nhật</p>
+                            <p className=' text-white text-3xl font-semibold'>Cập nhật</p>
                         </button>
                     </form>
 

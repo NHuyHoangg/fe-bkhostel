@@ -1,10 +1,10 @@
 import RentalPost from "./RentalPost"
 
-const PostList = ({postsInfo}) => {
+const PostList = ({postsInfo, totalPost}) => {
   return (
     <div className="flex flex-col gap-4 px-3 py-3 border border-gray-300 rounded-md ">
       <p className="font-semibold text-lg mb-2">
-        Tổng {postsInfo.length} kết quả
+        Tổng {totalPost} kết quả
       </p>
       <div className="flex items-center">
         <p className="text-base font-semibold mr-5">

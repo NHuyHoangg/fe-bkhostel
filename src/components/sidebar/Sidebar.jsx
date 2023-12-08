@@ -20,7 +20,12 @@ const Sidebar = (props) => {
   });
 
   const [active, setActive] = useState([0,0,0,0,0])
-
+  const historyMoneny = () => {
+    navigate('/history-money', { state: { profile, authToken } });
+  };
+  const recharge = () => {
+    navigate('/recharge', { state: { profile, authToken } });
+  };
   const checkAuth = () => {
     if (authToken === null) navigate('/login');
   }
@@ -86,13 +91,13 @@ const Sidebar = (props) => {
                       Thông tin cá nhân
                 </div>
               </a>
-              <a href="./history-money/">
-                <div className={active[3]? "my-1 p-3 hover:cursor-pointer hover:bg-[#E7E6EC] item bg-[#E7E6EC]" : "my-1 p-3 hover:cursor-pointer hover:bg-[#E7E6EC] item"}>
+              <a href="./recharge">
+                <div onClick={recharge} className={active[3]? "my-1 p-3 hover:cursor-pointer hover:bg-[#E7E6EC] item bg-[#E7E6EC]" : "my-1 p-3 hover:cursor-pointer hover:bg-[#E7E6EC] item"}>
                       Nạp tiền
                 </div>
               </a>
-              <a href="./history-money/history">
-                <div className={active[4]? "my-1 p-3 hover:cursor-pointer hover:bg-[#E7E6EC] item bg-[#E7E6EC]" : "my-1 p-3 hover:cursor-pointer hover:bg-[#E7E6EC] item"}>
+              <a href="./history-money">
+                <div onClick={historyMoneny} className={active[4]? "my-1 p-3 hover:cursor-pointer hover:bg-[#E7E6EC] item bg-[#E7E6EC]" : "my-1 p-3 hover:cursor-pointer hover:bg-[#E7E6EC] item"}>
                       Lịch sử nạp tiền
                 </div>
               </a>

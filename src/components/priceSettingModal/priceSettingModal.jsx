@@ -40,19 +40,19 @@ const PriceSettingModal = ({ setShowModal, originPrice,handleModifyPrice }) => {
               <input
                 className="shadow appearance-none border rounded w-full py-2 px-1 text-black"
                 type="number"
-                {...register("dayPrice", {
+                {...register("daily_price", {
                   required: true,
                   pattern: /^[0-9]+$/,
                 })}
               />
-              {errors?.dayPrice?.type === "required" && (
+              {errors?.daily_price?.type === "required" && (
                 <p className="text-red-600 font-light">
                   {" "}
                   <RiAlertFill className="inline" /> Vui lòng không để trống giá
                   ngày!
                 </p>
               )}
-              {errors?.dayPrice?.type === "pattern" && (
+              {errors?.daily_price?.type === "pattern" && (
                 <p className="text-red-600 font-light">
                   {" "}
                   <RiAlertFill className="inline" /> Dữ liệu nhập vào không phải
@@ -65,19 +65,19 @@ const PriceSettingModal = ({ setShowModal, originPrice,handleModifyPrice }) => {
               <input
                 className="shadow appearance-none border rounded w-full py-2 px-1 text-black"
                 type="number"
-                {...register("weekPrice", {
+                {...register("weekly_price", {
                   required: true,
                   pattern: /^[0-9]+$/,
                 })}
               />
-              {errors?.weekPrice?.type === "required" && (
+              {errors?.weekly_price?.type === "required" && (
                 <p className="text-red-600 font-light">
                   {" "}
                   <RiAlertFill className="inline" /> Vui lòng không để trống giá
                   ngày!
                 </p>
               )}
-              {errors?.weekPrice?.type === "pattern" && (
+              {errors?.weekly_price?.type === "pattern" && (
                 <p className="text-red-600 font-light">
                   {" "}
                   <RiAlertFill className="inline" /> Dữ liệu nhập vào không phải
@@ -90,19 +90,19 @@ const PriceSettingModal = ({ setShowModal, originPrice,handleModifyPrice }) => {
               <input
                 className="shadow appearance-none border rounded w-full py-2 px-1 text-black"
                 type="number"
-                {...register("monthPrice", {
+                {...register("monthly_price", {
                   required: true,
                   pattern: /^[0-9]+$/,
                 })}
               />
-              {errors?.monthPrice?.type === "required" && (
+              {errors?.monthly_price?.type === "required" && (
                 <p className="text-red-600 font-light">
                   {" "}
                   <RiAlertFill className="inline" /> Vui lòng không để trống giá
                   ngày!
                 </p>
               )}
-              {errors?.monthPrice?.type === "pattern" && (
+              {errors?.monthly_price?.type === "pattern" && (
                 <p className="text-red-600 font-light">
                   {" "}
                   <RiAlertFill className="inline" /> Dữ liệu nhập vào không phải
