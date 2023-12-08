@@ -5,7 +5,7 @@ import { memo, useState,useEffect } from "react";
 import { IoSearchOutline } from "react-icons/io5";
 import AdminPagination from "../../components/adminPagination/AdminPagination";
 import UserRow  from "../../components/tableRow/UserRow";
-import LeftSideBar from "../user-detail/components/left-side-bar";
+import LeftSideBar from "../user-detail/components/LeftSideBar";
 import axios from "axios";
 
 const accURL = import.meta.env.VITE_BACKEND_API + "/admin/user";

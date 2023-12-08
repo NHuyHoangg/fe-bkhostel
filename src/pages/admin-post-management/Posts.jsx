@@ -8,7 +8,7 @@ import AdminPagination from "../../components/adminPagination/AdminPagination";
 import { BsFillTrash3Fill } from "react-icons/bs";
 import { BiSolidDetail } from "react-icons/bi";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import LeftSideBar from "../user-detail/components/left-side-bar";
+import LeftSideBar from "../user-detail/components/LeftSideBar";
 import axios from "axios";
 
 const postURL = import.meta.env.VITE_BACKEND_API + "/admin/post";

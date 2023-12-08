@@ -11,7 +11,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import LeftSideBar from "../user-detail/components/left-side-bar";
+import LeftSideBar from "../user-detail/components/LeftSideBar";
 
 const Statistics = memo(() => {
   const data = [

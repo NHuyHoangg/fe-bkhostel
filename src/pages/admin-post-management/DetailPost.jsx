@@ -3,7 +3,7 @@ import axios from "axios";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import Carousel from "../../components/admin/Carousel";
 import Gallery from "../../components/admin/Gallery";
-import LeftSideBar from "../user-detail/components/left-side-bar";
+import LeftSideBar from "../user-detail/components/LeftSideBar";
 
 const postURL = import.meta.env.VITE_BACKEND_API + "/posts";
 const authToken = localStorage.getItem("token");

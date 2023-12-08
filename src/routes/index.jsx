@@ -17,11 +17,12 @@ import DetailPost from '../pages/admin-post-management/DetailPost';
 import Statistics from '../pages/statistics/Statistics';
 // import { PostFilterContextProvider } from '../contexts/PostFilterContext';
 
-import HistoryMoney from '../pages/history-money/history-money';
-import Recharge from '../pages/history-money/recharge';
-import AddUser from '../pages/user-detail/add-user';
-import ChangePassWord from '../pages/user-detail/change-password';
-import UserDetail from '../pages/user-detail/user-list';
+import HistoryMoney from '../pages/history-money/HistoryMoney';
+import Recharge from '../pages/history-money/Recharge';
+import AddUser from '../pages/user-detail/AddUser';
+import ChangePassWord from '../pages/user-detail/ChangePassword';
+import UserInfo from '../pages/user-detail/UserInfo';
+
 import UserList from '../pages/manage-user/UserList';
 import PostHistory from '../pages/post-history/PostHistory';
 import Profile from '../pages/profile/Profile';
@@ -92,7 +93,7 @@ const router = createBrowserRouter([
   },
   ,
   {
-    path: '/history-money/history',
+    path: '/recharge',
     element: <UserLayout />,
     errorElement: <ErrorPage />,
     children: [{ index: true, element: <Recharge /> }],
@@ -112,8 +113,14 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
+    path: 'admin/userInfo',
+    element: <UserInfo />,
+    errorElement: <ErrorPage />,
+  },
+  {
     path: 'admin/user',
-    element: <UserDetail />,
+    element: <UserInfo />,
+    errorElement: <ErrorPage />,
   },
   {
     path: 'admin/pricing',

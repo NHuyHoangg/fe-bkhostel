@@ -6,7 +6,7 @@ import { memo, useEffect, useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
 import PricingRow from "../../components/tableRow/PricingRow";
 import PriceSettingModal from "../../components/priceSettingModal/priceSettingModal";
-import LeftSideBar from "../user-detail/components/left-side-bar";
+import LeftSideBar from "../user-detail/components/LeftSideBar";
 import { useNavigate } from "react-router-dom";
 
 const paymentURL = import.meta.env.VITE_BACKEND_API + "/services";

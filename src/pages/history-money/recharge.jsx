@@ -1,75 +1,84 @@
+import axios from "axios";
+import { useState, useEffect } from "react";
+import Sidebar from "../../components/sidebar/Sidebar";
+import { useLocation } from "react-router-dom";
+
+const url = `https://bkhostel.hcmut.tech/users/`;
+const submitLink = `https://bkhostel.hcmut.tech/recharge/create_payment_url`;
+
 const Recharge = () => {
+    const {state} = useLocation(); 
+    const [infoUser, setInfoUser] = useState(state.profile);
+    const [amount, setAmount] = useState({
+        amount: 0,
+        language: "vn"
+    });
+    const getData = async () => {
+        try {
+            const res = await axios.get(url, {
+                headers: {
+                    'Authorization': `Bearer ${state.authToken}`
+                }
+            });
+            setInfoUser(res.data);
+            console.log(res.data);
+
+        } catch (error) {
+            console.log(error.response);
+        }
+    };
+    const handleChange = (event) => {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+        setAmount(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+    const handleSubmit = async () => {
+        try {
+            const res = await axios.post(submitLink, amount, {
+                headers: {
+                    'Authorization': `Bearer ${state.authToken}`
+                }
+            });
+            window.location.replace(res.data.paymentURL);
+            setAmount(amount);
+            console.log(res.data);
+
+        } catch (error) {
+            console.log(error.response);
+        }
+    }
+    useEffect(() => {
+        getData();
+    }, []);
     return (
         <div className="grid grid-cols-8 gap-3 mr-20 ">
-            <div className="font-semibold row-start-1 row-span-7 col-start-1 col-span-2 pl-3 text-lg bg-[#F5F4F3]">
-                <div className="py-8 grid grid-cols-2">
-                    <div className="grid grid-cols-2">
-                        <div className="w-20 h-20 rounded-full bg-white items-center">
-                            <p></p>
-                        </div>
-                        <div className="pl-3 pt-3 items-center justify-center">
-                            <div className="hover:cursor-pointer">user</div>
-                            <div>12345678</div>
-                        </div>
-                    </div>
+            <Sidebar item={3} />
+            <div className="flex flex-col row-start-1 row-span-7 col-start-3 col-span-6 ml-5">
+                <div className="px-3 py-4 mt-6 border-b border-gray rounded-md h-fit text-5xl">
+                    NẠP TIỀN
                 </div>
-                <div className="my-8 hover:cursor-pointer">Đăng tin cho thuê</div>
-                <div className="my-8 hover:cursor-pointer">Lịch sử cho thuê</div>
-                <div className="my-8 hover:cursor-pointer">Thông tin cá nhân</div>
-                <div className="my-8 hover:cursor-pointer">Nạp tiền</div>
-                <div className="my-8 hover:cursor-pointer">Lịch sử nạp tiền</div>
-                <div className="my-8 hover:cursor-pointer">Thoát</div>
-            </div>
-            <div className="flex flex-col row-start-1 row-span-7 col-start-3 col-span-6  ">
-                <div className="px-3 py-4 mt-6 border-b border-gray rounded-md h-fit text-5xl mb-6">
-                    LỊCH SỬ NẠP TIỀN
+                <div className="px-3 py-4 mt-3 bg-gray-300 border-b border-gray rounded-md h-fit text-2xl">
+                    <div>Số dư ví</div>
+                    <div className="pt-10">{infoUser.balance}</div>
                 </div>
-                <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400 border-2">
-                    <thead class="text-sm text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                        <tr>
-                            <th scope="col" class="px-6 py-3 border-b-2 border-r-2">
-                                Ngày nạp tiền
-                            </th>
-                            <th scope="col" class="px-6 py-3 border-b-2 border-r-2">
-                                Mã giao dịch
-                            </th>
-                            <th scope="col" class="px-6 py-3 border-b-2 border-r-2">
-                                Số tiền
-                            </th>
-                            <th scope="col" class="px-6 py-3 border-b-2 border-r-2">
-                                Phương thức
-                            </th>
-                            <th scope="col" class="px-6 py-3 border-b-2 border-r-2">
-                                Trạng thái
-                            </th>
-                            <th scope="col" class="px-6 py-3 border-b-2 border-r-2">
-                                #
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <td class="px-6 py-4 grid-cols-6">
+                <div className="text-2xl py-3 mt-6">
+                    Phương thức nạp tiền
+                </div>
+                <div className="px-3 py-3 bg-gray-300 border-b border-gray rounded-md h-40 text-2xl">
+                    VNPAY
+                </div>
+                <div className="col-start-3 col-span-6 text-2xl py-3 mt-6">
+                    Số tiền nạp
+                </div>
+                <input onChange={handleChange} value={amount.amount} name="amount" className="px-3 py-3 border border-gray rounded-md h-14 text-2xl" />
 
-                            </td>
-                            <td class="px-6 py-4">
-
-                            </td>
-                            <td class="px-6 py-4">
-
-                            </td>
-                            <td class="px-6 py-4">
-
-                            </td>
-                            <td class="px-6 py-4">
-
-                            </td>
-                            <td class="px-6 py-4">
-
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <button onClick={handleSubmit} className='justify-center items-center rounded-md px-3 py-3 mt-8 mb-16 bg-[#0000FF]'>
+                    <p className='text-sm text-white text-3xl font-semibold'>Nạp Tiền</p>
+                </button>
             </div>
         </div>
     )
