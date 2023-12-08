@@ -1,3 +1,6 @@
+/* eslint-disable react/display-name */
+/* eslint-disable no-unused-vars */
+// eslint-disable-next-line react/display-name
 import { memo, useState } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import Carousel from "../../components/admin/Carousel";

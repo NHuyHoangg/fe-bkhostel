@@ -69,8 +69,8 @@ const Statistics = memo(() => {
               <div className="flex justify-between mr-8 pl-4">
                 <div className="font-bold text-xl">Lượng truy cập</div>
                 <select name="" id="" className="rounded-xl bg-[#E8F1FD]">
-                  <option value="">Hiển thị theo tháng</option>
-                  <option value="">Hiển thị theo năm</option>
+                  <option value="">Show By Month</option>
+                  <option value="">Show By Year</option>
                 </select>
               </div>
               <ResponsiveContainer width="100%" height="100%">
@@ -106,7 +106,7 @@ const Statistics = memo(() => {
                   </div>
                   <div className="bg-white rounded-b-2xl text-center">
                     <div className="py-2 text-2xl font-bold">2468</div>
-                    <p className="font-bold pb-2">Trong tuần trước</p>
+                    <p className="font-bold pb-2">In last week</p>
                   </div>
                 </div>
                 <div className="w-full lg:w-1/2 p-2">
@@ -115,7 +115,7 @@ const Statistics = memo(() => {
                   </div>
                   <div className="bg-white rounded-b-2xl text-center">
                     <div className="py-2 text-2xl font-bold">2468</div>
-                    <p className="font-bold pb-2">Trong tuần trước</p>
+                    <p className="font-bold pb-2">In last week</p>
                   </div>
                 </div>
                 <div className="w-full lg:w-1/2 p-2">
@@ -124,7 +124,7 @@ const Statistics = memo(() => {
                   </div>
                   <div className="bg-white rounded-b-2xl text-center">
                     <div className="py-2 text-2xl font-bold">2468</div>
-                    <p className="font-bold pb-2">Trong tuần trước</p>
+                    <p className="font-bold pb-2">In last week</p>
                   </div>
                 </div>
                 <div className="w-full lg:w-1/2 p-2">
@@ -133,7 +133,7 @@ const Statistics = memo(() => {
                   </div>
                   <div className="bg-white rounded-b-2xl text-center">
                     <div className="py-2 text-2xl font-bold">2468</div>
-                    <p className="font-bold pb-2">Trong tuần trước</p>
+                    <p className="font-bold pb-2">In last week</p>
                   </div>
                 </div>
                 <div className="w-full px-2">

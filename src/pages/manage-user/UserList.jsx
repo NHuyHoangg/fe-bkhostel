@@ -92,9 +92,9 @@ const Pricing = memo(() => {
                   <div className="col-span-1">ID</div>
                   <div className="col-span-5">Họ tên</div>
                   <div className="col-span-3">Email</div>
-                  <div className="col-span-1">Vai trò</div>
-                  <div className="col-span-3">Trạng thái</div>
-                  <div className="col-span-3">Thao tác</div>
+                  <div className="col-span-1">Role</div>
+                  <div className="col-span-3">Status</div>
+                  <div className="col-span-3">Action</div>
                 </div>
                 {users.map((item, index) => {
                   return (

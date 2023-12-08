@@ -1,23 +1,13 @@
-
-
-
-
 /* eslint-disable react/display-name */
 /* eslint-disable no-unused-vars */
 // eslint-disable-next-line react/display-name
-import { memo, useState, useEffect } from "react";
-
+import { memo, useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
 import AdminPagination from "../../components/adminPagination/AdminPagination";
 import { BsFillTrash3Fill } from "react-icons/bs";
 import { BiSolidDetail } from "react-icons/bi";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import LeftSideBar from "../user-detail/components/left-side-bar";
-import axios from "axios";
-
-const postURL = import.meta.env.VITE_BACKEND_API + "/admin/post";
-const authToken = localStorage.getItem("token");
-const config = { Authorization: authToken };
 
 const Posts = memo(() => {
   const originPosts = [
@@ -78,76 +68,64 @@ const Posts = memo(() => {
       status: "Đã xác nhận",
     },
   ];
-  const [postsAdmin, setPostsAdmin] = useState({});
-  const [pageNum,setPageNum] = useState(1);
-  const getPosts = async (pageNum) => {
-    try {
-      await axios.get(`${postURL}?page=${pageNum}`,{headers:config}).then((res) => {
-        console.log('get post-admin: ',res.data);
-        setPostsAdmin(res.data);
-      });
-    } catch (error) {
-      const customError = new Error();
-      customError.message = error.response.data.message;
-      throw customError;
-    }
-  };
-  useEffect(() => {
-    getPosts(pageNum);
-  }, [pageNum]);
-
   const { state } = useLocation();
   console.log(state);
 
-  // const [posts, setPosts] = useState(() => {
-  //   if (state) {
-  //     const handleType = state?.verifiedId ? "verify" : "delete";
-  //     const handleId = state?.verifiedId ?? state?.deletedId;
+  const [page, setPage] = useState({
+    current: 0,
+    quantity: 3,
+  });
+  const [posts, setPosts] = useState(() => {
+    if (state) {
+      const handleType = state?.verifiedId ? "verify" : "delete";
+      const handleId = state?.verifiedId ?? state?.deletedId;
 
-  //     let len = originPosts.length;
-  //     let i = 0;
-  //     while (i < len) {
-  //       if (originPosts[i].id == handleId) break;
-  //       i++;
-  //     }
-  //     if (handleType === "verify") {
-  //       originPosts[i].status = "Đã xác nhận";
-  //     } else {
-  //       originPosts.splice(i, 1);
-  //     }
-  //     return originPosts;
-  //   }
-  //   return originPosts;
-  // });
+      let len = originPosts.length;
+      let i = 0;
+      while (i < len) {
+        if (originPosts[i].id == handleId) break;
+        i++;
+      }
+      if (handleType === "verify") {
+        originPosts[i].status = "Đã xác nhận";
+      } else {
+        originPosts.splice(i, 1);
+      }
+      return originPosts;
+    }
+    return originPosts;
+  });
   const [seletedFilter, setSelectedFilter] = useState("All");
   const navigate = useNavigate();
 
   const handlePageChange = (newPage) => {
-    console.log("change ",newPage);
-    setPageNum(newPage);
+    setPage({
+      current: newPage,
+      quantity: page.quantity,
+    });
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
   };
-  // const handleDeletedItem = (id) => {
-  //   let temp = posts.filter((item) => item.id !== id);
-  //   setPosts(temp);
-  // };
-  // const handleFilter = (type) => {
-  //   setSelectedFilter(type);
-  //   if (type !== seletedFilter) {
-  //     if (type === "All") {
-  //       setPosts(originPosts);
-  //     } else {
-  //       let filteredPosts = originPosts.filter((item) => {
-  //         return item.status === type;
-  //       });
-  //       setPosts(filteredPosts);
-  //     }
-  //   }
-  // };
-
+  const handleDeletedItem = (id) => {
+    let temp = posts.filter((item) => item.id !== id);
+    setPosts(temp);
+  };
+  const handleFilter = (type) => {
+    setSelectedFilter(type);
+    if (type !== seletedFilter) {
+      if (type === "All") {
+        setPosts(originPosts);
+      } else {
+        let filteredPosts = originPosts.filter((item) => {
+          return item.status === type;
+        });
+        setPosts(filteredPosts);
+      }
+    }
+  };
+  
   //CSS Style variable
   const activeFilter = "bg-[#25BEB9] text-white";
   const nonactiveFilter =
@@ -155,7 +133,7 @@ const Posts = memo(() => {
 
   return (
     <div className="grid grid-cols-12">
-      <LeftSideBar />
+      <LeftSideBar/>
       <div className="w-auto col-start-3 col-span-10 h-[100vh] bg-[#e8f1fd]">
         <div className="pt-8 ml-8">
           <h2 className="font-bold text-3xl">Danh sách bài đăng</h2>
@@ -168,7 +146,7 @@ const Posts = memo(() => {
                       seletedFilter === "All" ? activeFilter : nonactiveFilter
                     }`}
                     onClick={() => {
-                      // handleFilter("All");
+                      handleFilter("All");
                     }}
                   >
                     Tất cả
@@ -180,7 +158,7 @@ const Posts = memo(() => {
                         : nonactiveFilter
                     } ml-2`}
                     onClick={() => {
-                      // handleFilter("Đang chờ");
+                      handleFilter("Đang chờ");
                     }}
                   >
                     Đang chờ
@@ -192,7 +170,7 @@ const Posts = memo(() => {
                         : nonactiveFilter
                     } ml-2`}
                     onClick={() => {
-                      // handleFilter("Đã xác nhận");
+                      handleFilter("Đã xác nhận");
                     }}
                   >
                     Đã xác nhận
@@ -226,7 +204,7 @@ const Posts = memo(() => {
               </div>
               <div className="mt-4 text-center">
                 <div className="grid grid-cols-16 font-bold bg-[#b6d6f2] rounded-xl py-2 text-sm md:text-xl">
-                  <div className="hidden md:col-span-1 md:block">ID</div>
+                  <div className="hidden md:col-span-1">ID</div>
                   <div className="col-span-3">Tên bài đăng</div>
                   <div className="col-span-2">Người đăng</div>
                   <div className="col-span-3">Ngày đăng</div>
@@ -234,30 +212,28 @@ const Posts = memo(() => {
                   <div className="col-span-2">Trạng thái</div>
                   <div className="col-span-2">Thao tác</div>
                 </div>
-                {postsAdmin?.posts?.length
-                  ? postsAdmin.posts.map((post, idx) => {
+                {posts.length
+                  ? posts.map((post, idx) => {
                       return (
                         <div
                           className="grid grid-cols-16 py-2 text-xs md:text-xl md:hover:bg-blue-100 hover:rounded-lg"
                           key={idx}
-                          onClick={() =>
-                            navigate("../admin/posts/detail", { state: post })
-                          }
+                          onClick={()=>navigate("../admin/posts/detail",{state: post})}
                         >
-                          <div className="hidden md:col-span-1 md:block">{idx+1}</div>
+                          <div className="hidden md:col-span-1">{post.id}</div>
                           <div className="col-span-4 md:col-span-3">
-                            {post.title}
+                            {post.postName}
                           </div>
-                          <div className="col-span-2">{post.created_by.full_name}</div>
-                          <div className="col-span-3">{post.createDate}</div>
-                          <div className="col-span-3">Quận {post.full_address.district}</div>
+                          <div className="col-span-2">{post.seller}</div>
+                          <div className="col-span-3">{post.date}</div>
+                          <div className="col-span-3">{post.location}</div>
                           <div className="col-span-3 md:col-span-2">
                             {" "}
                             <span
                               className={`${
-                                post?.status == "ACCEPTED"
+                                post?.status == "Đã xác nhận"
                                   ? "bg-[#59d9cc]"
-                                  : post?.status=="PENDING"?"bg-[#f5a201]":"bg-red-700"
+                                  : "bg-[#f5a201]"
                               } text-white px-1 lg:px-4 md:text-sm lg:py-1 inline-block rounded-sm lg:rounded-xl`}
                             >
                               {post.status}
@@ -268,7 +244,7 @@ const Posts = memo(() => {
                               <BiSolidDetail className="hidden lg:block mr-1 md:mr-2 lg:mr-4 w-6 h-6 cursor-pointer hover:scale-105 hover:text-[rgb(57,197,200)]" />
                             </Link>
                             <BsFillTrash3Fill
-                              // onClick={/*() => handleDeletedItem(post.id)*/}
+                              onClick={() => handleDeletedItem(post.id)}
                               className="mt-[-4px] md:mt-0 w-6 h-6 cursor-pointer hover:scale-105 hover:text-[rgb(57,197,200)]"
                             />
                           </div>
@@ -279,12 +255,12 @@ const Posts = memo(() => {
               </div>
               <div className="mt-8 lg:mt-12">
                 <span className="ml-4">
-                  Hiển thị 1 đến {postsAdmin.totalPosts} của {postsAdmin.totalPosts} mục
+                  Hiển thị 1 đến {posts.length} của {posts.length} mục
                 </span>
                 <div className="flex justify-center text-center">
                   <AdminPagination
                     handleChange={handlePageChange}
-                    pageStatus={pageNum}
+                    pageStatus={page}
                   />
                 </div>
               </div>

@@ -11,18 +11,18 @@ import SendPasswordPage from '../pages/send-password/SendPassword';
 import SavePost from '../pages/save-post/SavePost';
 import PostDetail from '../pages/post-detail/PostDetail';
 
-import PricingPage from '../pages/pricing/Pricing';
-import PostsPage from '../pages/posts/Posts';
-import DetailPost from '../pages/posts/DetailPost';
-import Statistics from '../pages/statistics/Statistics';
-import { PostFilterContextProvider } from '../contexts/PostFilterContext';
-
 import HistoryMoney from '../pages/history-money/history-money';
 import Recharge from '../pages/history-money/recharge';
 import AddUser from '../pages/user-detail/add-user';
 import ChangePassWord from '../pages/user-detail/change-password';
 import UserDetail from '../pages/user-detail/user-list';
 import UserList from '../pages/manage-user/UserList';
+
+import PricingPage from '../pages/pricing/Pricing';
+import PostsPage from '../pages/posts/Posts';
+import DetailPost from '../pages/posts/DetailPost';
+import Statistics from '../pages/statistics/Statistics';
+
 import PostHistory from '../pages/post-history/PostHistory';
 import Profile from '../pages/profile/Profile';
 import PostNew from '../pages/post-new/PostNew';
@@ -31,31 +31,19 @@ import ServicesTable from '../pages/services-table/ServicesTable';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: (<UserLayout />),
-    // (
-    //   <PostFilterContextProvider>
-    //     <UserLayout />
-    //   </PostFilterContextProvider>
-    // ),
+    element: <UserLayout />,
     errorElement: <ErrorPage />,
     children: [
-      {
-        index: true,
-        element: <HomePage />,
-      },
+      { index: true, element: <HomePage /> },
       {
         path: '/save-post',
         element: <SavePost />,
         errorElement: <ErrorPage />,
       },
       {
-        path: '/post-detail/:id',
+        path: '/post-detail',
         element: <PostDetail />,
         errorElement: <ErrorPage />,
-      },
-      {
-        path: '/services',
-        element: <ServicesTable />,
       },
     ],
   },
@@ -90,7 +78,6 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [{ index: true, element: <HistoryMoney /> }],
   },
-  ,
   {
     path: '/history-money/history',
     element: <UserLayout />,
@@ -145,11 +132,9 @@ const router = createBrowserRouter([
     element: <PostNew />,
     errorElement: <ErrorPage />,
   },
-
   {
-    path: '/pricing',
-    element: <PricingPage />,
-    errorElement: <ErrorPage />,
+    path: '/services',
+    element: <ServicesTable />,
   },
   {
     path: 'admin/statistics',

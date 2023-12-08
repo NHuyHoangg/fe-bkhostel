@@ -10,16 +10,16 @@ const Pagination = memo(({handleChange, pageStatus}) => {
 
   function renderPage(n) {
     let htmls = [];
-    for (let i = 1; i <= n; i++) {
+    for (let i = 0; i < n; i++) {
       htmls.push(
         <li key={i}>
           <button
             className={`px-3 py-1 transition-colors duration-150 focus:shadow-outline ${
-              pageStatus === i ? selectedPageCSS : notSelectedPageCSS
+              pageStatus.current === i ? selectedPageCSS : notSelectedPageCSS
             }`}
             onClick={()=>{handleChange(i)}}
           >
-            {i}
+            {i + 1}
           </button>
         </li>
       );
@@ -42,7 +42,7 @@ const Pagination = memo(({handleChange, pageStatus}) => {
               <FaArrowLeft className="text-xl" onClick={()=>{if (pageStatus.current!==0 ) handleChange(pageStatus.current-1)}}/>
             </button>
           </li>
-          {renderPage(3)}
+          {renderPage(pageStatus.quantity)}
           <li>
             <button
               className={`px-3 py-1 transition-colors duration-150 focus:shadow-outline ${

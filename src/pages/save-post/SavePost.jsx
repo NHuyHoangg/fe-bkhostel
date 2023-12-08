@@ -1,48 +1,48 @@
-import { memo, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { fetchLikedPost } from '../../services/post/fetchlikedPost'
+import { memo } from 'react'
 import PostList from './components/PostList'
 import RentalFilterList from './components/RentalFilterList'
-import Loading from '../home/components/Loading'
 import Pagination from './components/Pagination'
 
 const SavePost = memo((props) => {
-    const [ page, setPage ] = useState(1)
-    const { isLoading, isFetching, error, data } = useQuery({
-      queryKey: ["posts", "saved"],
-      queryFn: () => fetchLikedPost({
-        page: page,
-        userToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NmM0MDAzZmI5MmZlMzM4MGNmOGJkYSIsInRva2VuVmVyc2lvbiI6MCwiaWF0IjoxNzAxNTk2OTgzfQ.m1INfJU-JAgbcXC-hIc-xKC3zqaRcjvjfvBq5NuMGxc"
-      })
-    })
-
-    const TOTAL_PAGE = 5
+    const postsInfo = [
+      {
+        imageUrl: "https://timescityminhkhai.com/wp-content/uploads/sites/4/2020/10/phong-tro-cho-thue.jpg", 
+        title: "Phòng trọ giá tốt tại Q.5", 
+        postDate : 5, 
+        price: 1.5, 
+        area: 22, 
+        address: "P10-Q5", 
+        description: "Lorem ipsum dolor sit amet consectetur. Cras eget faucibus vel nec dignissim tellus mi. Gravida quam viverra at ut senectus nisi donec cursus."
+      },
+      {
+        imageUrl: "https://timescityminhkhai.com/wp-content/uploads/sites/4/2020/10/phong-tro-cho-thue.jpg", 
+        title: "Phòng trọ giá tốt tại Q.5", 
+        postDate : 5, 
+        price: 1.5, 
+        area: 22, 
+        address: "P10-Q5", 
+        description: "Lorem ipsum dolor sit amet consectetur. Cras eget faucibus vel nec dignissim tellus mi. Gravida quam viverra at ut senectus nisi donec cursus."
+      },
+      {
+        imageUrl: "https://timescityminhkhai.com/wp-content/uploads/sites/4/2020/10/phong-tro-cho-thue.jpg", 
+        title: "Phòng trọ giá tốt tại Q.5", 
+        postDate : 5, 
+        price: 1.5, 
+        area: 22, 
+        address: "P10-Q5", 
+        description: "Lorem ipsum dolor sit amet consectetur. Cras eget faucibus vel nec dignissim tellus mi. Gravida quam viverra at ut senectus nisi donec cursus."
+      },
     
-    const gotoPage = (page) => {
-      setPage(_ => {
-        if(page <= 0) return 1;
-        if(page > TOTAL_PAGE) return TOTAL_PAGE;
-        return page;
-      })
-    }    
+    ] 
 
   
     return (
-      <div className='grid grid-cols-[1.6fr_1fr] mx-auto w-full content-center max-w-[1200px] my-5'>
-        {isFetching 
-          ? <div className='min-h-screen text-center'><Loading /> </div>
-          : <div className='flex flex-col items-center'>
-              <PostList postsInfo={data?.result}/> 
-              <Pagination 
-                currentPage={page}
-                totalPage={5}
-                gotoPage={gotoPage}
-              />
-            </div>
-          }
-        {/* <RentalFilterList /> */}
-      </div>
+    <div className='grid grid-cols-[1.6fr_1fr] mx-auto w-full content-center max-w-[1200px]'>
+      <PostList postsInfo={[]}/> 
+      <RentalFilterList />
+      <Pagination />
+    </div>
     );
-});
+  });
 
 export default SavePost
